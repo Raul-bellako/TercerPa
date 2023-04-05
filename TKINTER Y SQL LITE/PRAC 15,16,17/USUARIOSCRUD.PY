@@ -22,12 +22,23 @@ def exeSelectUser():
         messagebox.showinfo("No encontrado","Usuario no existe en la Base de Datos")
 
 
-def exeSelectAll():
+"""def exeSelectAll():
     users = c.mostrarUsuarios()
     if users:
         for user in users:
             cadena = f'{user[0]} {user[1]} {user[2]} {user[3]}\n'
             textConsulta.insert(tk.END, cadena)
+    else:
+        messagebox.showinfo("Sin datos por mostrar","No se encontraron usuarios en la BD")"""
+
+def exeSelectAll():
+    # Eliminamos los datos previos del treeview
+    tree.delete(*tree.get_children())
+    users = c.mostrarUsuarios()
+    if users:
+        for user in users:
+            cadena = (user[0], user[1], user[2], user[3])
+            tree.insert('', tk.END, values=cadena)
     else:
         messagebox.showinfo("Sin datos por mostrar","No se encontraron usuarios en la BD")
 
@@ -92,10 +103,23 @@ textBus.pack()
 titulo3 = Label(pestana3,text="Consultorio de usuarios",fg="#DAA520",font=("Arial",28)).pack()
 
 btnConsultar = Button(pestana3,text="Click para consultar",command=exeSelectAll).pack()
-
 subtConsulta = Label(pestana3,text="Usuarios registrados",fg="#ADFF2F",font=("Arial",28)).pack()
-textConsulta = Text(pestana3, height=15, width=75)
-textConsulta.pack()
+
+# Creamos el treeview
+tree = ttk.Treeview(pestana3, columns=(1,2,3,4), show="headings", height=15)
+tree.pack()
+
+# Configuramos las columnas
+tree.heading(1, text="ID")
+tree.heading(2, text="Nombre")
+tree.heading(3, text="Correo")
+tree.heading(4, text="Contraseña")
+
+# Definimos el tamaño de columnas
+tree.column(1, width=50)
+tree.column(2, width=200)
+tree.column(3, width=200)
+tree.column(4, width=200)
 
 #Pestaña 4
 titulo4 = Label(pestana4,text="Actualizar usuario",fg="#FF5733",font=("Arial",28)).pack()
